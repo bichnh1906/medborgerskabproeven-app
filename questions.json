@@ -1,0 +1,40 @@
+[
+  {
+    "question_da": "Hvad er Danmarks styreform?",
+    "question_en": "What is the form of government in Denmark?",
+    "choices_da": [
+      "Monarki",
+      "Demokrati",
+      "Diktatur",
+      "Teokrati"
+    ],
+    "choices_en": [
+      "Monarchy",
+      "Democracy",
+      "Dictatorship",
+      "Theocracy"
+    ],
+    "correct_index": 1,
+    "explanation_da": "Danmark er et demokrati, hvor borgerne vælger politikerne.",
+    "explanation_en": "Denmark is a democracy where citizens elect the politicians."
+  },
+  {
+    "question_da": "Hvad hedder Danmarks grundlov?",
+    "question_en": "What is the name of Denmark's constitution?",
+    "choices_da": [
+      "Danmarks Riges Grundlov",
+      "Folkestyrets Lov",
+      "Demokratiets Grundlov",
+      "Kongeloven"
+    ],
+    "choices_en": [
+      "The Constitution of the Kingdom of Denmark",
+      "The Law of Democracy",
+      "The Constitution of Democracy",
+      "The Royal Law"
+    ],
+    "correct_index": 0,
+    "explanation_da": "Danmarks grundlov hedder Danmarks Riges Grundlov.",
+    "explanation_en": "Denmark's constitution is called The Constitution of the Kingdom of Denmark."
+  }
+]
