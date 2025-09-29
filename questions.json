@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "question_da": "Hvad er Danmarks hovedstad?",
+    "question_en": "What is the capital of Denmark?",
+    "choices": [
+      {
+        "da": "Aarhus",
+        "en": "Aarhus"
+      },
+      {
+        "da": "Odense",
+        "en": "Odense"
+      },
+      {
+        "da": "København",
+        "en": "Copenhagen"
+      },
+      {
+        "da": "Aalborg",
+        "en": "Aalborg"
+      }
+    ],
+    "correct": 2,
+    "explanation_da": "Danmarks hovedstad er København.",
+    "explanation_en": "The capital of Denmark is Copenhagen."
+  }
+]
