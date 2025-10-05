@@ -1,59 +1,51 @@
 
 import streamlit as st
-import random
 import json
+import random
 
-# Load questions
-with open("questions.json", "r", encoding="utf-8") as f:
-    all_questions = json.load(f)
+# Load question pool
+with open("final_pool_for_streamlit.json", "r", encoding="utf-8") as f:
+    question_pool = json.load(f)
 
-def get_new_test():
-    if len(all_questions) < 25:
-        st.error("Der er ikke nok spørgsmål i databasen til at starte en test. Mindst 25 spørgsmål kræves.")
-        return []
-    return random.sample(all_questions, 25)
-
-st.set_page_config(page_title="Medborgerskabsprøven Øveapp", layout="centered")
-
-if "test" not in st.session_state:
-    st.session_state.test = get_new_test()
-    st.session_state.answers = [None] * len(st.session_state.test)
-    st.session_state.current_question = 0
+# Initialize session state
+if "questions" not in st.session_state:
+    st.session_state.questions = random.sample(question_pool, 25)
+    st.session_state.current = 0
     st.session_state.score = 0
-    st.session_state.completed = False
+    st.session_state.answers = []
 
-if st.session_state.test:
-    st.title("🇩🇰 Medborgerskabsprøven Øveapp")
+# Get current question
+q = st.session_state.questions[st.session_state.current]
 
-    q = st.session_state.test[st.session_state.current_question]
-    st.subheader(f"Spørgsmål {st.session_state.current_question + 1} af {len(st.session_state.test)}")
-    st.markdown(f"**{q['question_da']}**")
-    st.markdown(f"*{q['question_en']}*")
+st.title("Medborgerskabsprøven Øveværktøj / Citizenship Test Practice Tool")
 
-    options = [f"{opt['da']} / {opt['en']}" for opt in q["choices"]]
-    answer = st.radio("Vælg dit svar:", options, index=st.session_state.answers[st.session_state.current_question] or -1)
+st.markdown(f"**Spørgsmål {st.session_state.current + 1} / Question {st.session_state.current + 1}**")
+st.markdown(f"**DA:** {q['question_da']}")
+st.markdown(f"**EN:** {q.get('question_en', '')}")
 
-    if st.button("Indsend svar"):
-        selected = options.index(answer)
-        st.session_state.answers[st.session_state.current_question] = selected
-        if selected == q["correct"]:
-            st.session_state.score += 1
+options = list(q["answers_da"].keys())
+for opt in options:
+    st.markdown(f"- **{opt}**: {q['answers_da'][opt]} / {q['answers_en'].get(opt, '')}")
 
-        st.session_state.current_question += 1
-        if st.session_state.current_question >= len(st.session_state.test):
-            st.session_state.completed = True
+selected = st.radio("Vælg dit svar / Choose your answer:", options, key=st.session_state.current)
 
-    if st.session_state.completed:
-        st.success(f"Du fik {st.session_state.score} ud af {len(st.session_state.test)} rigtige.")
+if st.button("Bekræft / Submit"):
+    st.session_state.answers.append(selected)
+    correct = q["correct_option"]
+    if selected == correct:
+        st.session_state.score += 1
+        st.success(f"Korrekt! / Correct! ({correct})")
+    else:
+        st.error(f"Forkert / Incorrect. Korrekt svar er / Correct answer is: {correct}")
+    st.session_state.current += 1
+
+    if st.session_state.current >= 25:
+        st.markdown("---")
+        st.subheader("Resultat / Result")
+        st.markdown(f"**Score:** {st.session_state.score} / 25")
         if st.session_state.score >= 20:
-            st.balloons()
-            st.success("🎉 Tillykke! Du bestod testen.")
+            st.success("Du bestod testen! / You passed the test!")
         else:
-            st.warning("❌ Du bestod ikke testen. Prøv igen.")
-
-        if st.button("Tag testen igen"):
-            st.session_state.test = get_new_test()
-            st.session_state.answers = [None] * len(st.session_state.test)
-            st.session_state.current_question = 0
-            st.session_state.score = 0
-            st.session_state.completed = False
+            st.error("Du bestod ikke testen. / You did not pass the test.")
+        st.markdown("Genstart appen for at prøve igen. / Restart the app to try again.")
+        st.stop()
